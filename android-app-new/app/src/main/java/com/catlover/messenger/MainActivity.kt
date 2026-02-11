@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -330,23 +331,49 @@ fun MainScreen() {
                         color = Color(0xFFBD00FF),
                         style = MaterialTheme.typography.headlineSmall
                     )
-                    
-                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        IconButton(onClick = { selectedTab = 1 }) {
-                            Text("🔍", fontSize = 20.sp)
-                        }
-                        IconButton(onClick = { selectedTab = 2 }) {
-                            Text("👤", fontSize = 20.sp)
-                        }
-                    }
                 }
             }
             
             // Контент
-            when (selectedTab) {
-                0 -> ChatsListScreen(onChatClick = { chatId -> selectedChatId = chatId })
-                1 -> SearchUsersScreen()
-                2 -> ProfileScreen()
+            Box(modifier = Modifier.weight(1f)) {
+                when (selectedTab) {
+                    0 -> ChatsListScreen(onChatClick = { chatId -> selectedChatId = chatId })
+                    1 -> SearchUsersScreen()
+                    2 -> ProfileScreen()
+                }
+            }
+            
+            // Нижняя панель навигации
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = Color(0x30FFFFFF),
+                shadowElevation = 8.dp
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 12.dp),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    BottomNavItem(
+                        icon = "💬",
+                        label = "Чаты",
+                        selected = selectedTab == 0,
+                        onClick = { selectedTab = 0 }
+                    )
+                    BottomNavItem(
+                        icon = "🔍",
+                        label = "Поиск",
+                        selected = selectedTab == 1,
+                        onClick = { selectedTab = 1 }
+                    )
+                    BottomNavItem(
+                        icon = "👤",
+                        label = "Профиль",
+                        selected = selectedTab == 2,
+                        onClick = { selectedTab = 2 }
+                    )
+                }
             }
         }
     }
@@ -877,6 +904,27 @@ fun FeatureItem(icon: String, text: String) {
             text,
             color = Color(0xCCFFFFFF),
             fontSize = 14.sp
+        )
+    }
+}
+
+@Composable
+fun BottomNavItem(icon: String, label: String, selected: Boolean, onClick: () -> Unit) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+    ) {
+        Text(
+            icon,
+            fontSize = 24.sp,
+            modifier = Modifier.padding(bottom = 4.dp)
+        )
+        Text(
+            label,
+            fontSize = 12.sp,
+            color = if (selected) Color(0xFFBD00FF) else Color(0x80FFFFFF)
         )
     }
 }
