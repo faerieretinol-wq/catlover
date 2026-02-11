@@ -124,20 +124,47 @@ router.get('/:chatId/messages', authMiddleware, async (req, res) => {
 
 router.post('/:chatId/messages', authMiddleware, async (req, res) => {
   const { chatId } = req.params;
-  const { body, encryptedKey, iv, attachmentUrl, ttlSeconds, isVideoCircle } = req.body;
+  const {
+    body,
+    encryptedKey,
+    iv,
+    attachmentUrl,
+    ttlSeconds,
+    isVideoCircle,
+    attachmentPath,
+    ttl
+  } = req.body;
   const userId = req.user.userId;
   const db = getDb();
   const io = getIo();
   try {
     await req.setUserContext(db);
-    let expiresAt = ttlSeconds ? new Date(Date.now() + ttlSeconds * 1000) : null;
+
+    const normalizedAttachmentUrl = attachmentUrl ?? attachmentPath ?? null;
+    const normalizedTtlSeconds = typeof ttlSeconds === 'number' ? ttlSeconds : (typeof ttl === 'number' ? ttl : null);
+    let expiresAt = normalizedTtlSeconds ? new Date(Date.now() + normalizedTtlSeconds * 1000) : null;
     const result = await db.query(
       'INSERT INTO messages (chat_id, sender_id, body, encrypted_key, iv, attachment_url, expires_at, "isVideoCircle") VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
-      [chatId, userId, body, encryptedKey, iv, attachmentUrl, expiresAt, isVideoCircle || false]
+      [chatId, userId, body, encryptedKey || null, iv || null, normalizedAttachmentUrl, expiresAt, isVideoCircle || false]
     );
     const message = result.rows[0];
+
+    const senderRes = await db.query('SELECT username FROM users WHERE id = $1', [userId]);
+    const senderName = senderRes.rows[0]?.username || 'User';
+
     const members = await db.query('SELECT user_id FROM chat_members WHERE chat_id = $1', [chatId]);
-    members.rows.forEach(member => io.to(member.user_id).emit('new_message', message));
+
+    members.rows.forEach(member => {
+      io.to(member.user_id).emit('new_message', message);
+      io.to(member.user_id).emit('message', {
+        chatId,
+        body: message.body,
+        senderId: userId,
+        senderName,
+        attachmentPath: message.attachment_url || null,
+        createdAt: message.created_at
+      });
+    });
     res.status(201).json(message);
   } catch (err) {
     res.status(500).json({ error: 'Failed to send message' });
