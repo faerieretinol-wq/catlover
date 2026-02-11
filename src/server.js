@@ -2,17 +2,20 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
+const http = require('http');
+const path = require('path');
 const { dbInit } = require('./db');
+const { initSocket } = require('./socket');
+const { startCleanupTask } = require('./cleanup');
+
 const authRoutes = require('./routes/auth');
 const profileRoutes = require('./routes/profile');
 const chatRoutes = require('./routes/chat');
 const keysRoutes = require('./routes/keys');
 const uploadRoutes = require('./routes/upload');
-const path = require('path');
-
-const http = require('http');
-const { initSocket } = require('./socket');
-const { startCleanupTask } = require('./cleanup');
+const storiesRoutes = require('./routes/stories');
+const socialRoutes = require('./routes/social');
+const settingsRoutes = require('./routes/settings');
 
 const app = express();
 const server = http.createServer(app);
@@ -27,6 +30,9 @@ app.use('/api/profile', profileRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/keys', keysRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/stories', storiesRoutes);
+app.use('/api/social', socialRoutes);
+app.use('/api/settings', settingsRoutes);
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 app.get('/health', (req, res) => res.json({ status: 'ok' }));

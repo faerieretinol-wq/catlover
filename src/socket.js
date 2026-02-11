@@ -6,8 +6,9 @@ let io;
 function initSocket(server) {
   io = new Server(server, {
     cors: {
-      origin: "*",
-      methods: ["GET", "POST"]
+      origin: process.env.ALLOWED_ORIGINS?.split(',') || ["http://localhost:3000"],
+      methods: ["GET", "POST"],
+      credentials: true
     }
   });
 
@@ -24,28 +25,18 @@ function initSocket(server) {
 
   io.on('connection', (socket) => {
     console.log(`🔌 User connected: ${socket.userId}`);
-    
     socket.join(socket.userId);
 
     socket.on('call_offer', (data) => {
-      io.to(data.to).emit('call_offer', {
-        from: socket.userId,
-        offer: data.offer
-      });
+      io.to(data.to).emit('call_offer', { from: socket.userId, offer: data.offer });
     });
 
     socket.on('call_answer', (data) => {
-      io.to(data.to).emit('call_answer', {
-        from: socket.userId,
-        answer: data.answer
-      });
+      io.to(data.to).emit('call_answer', { from: socket.userId, answer: data.answer });
     });
 
     socket.on('ice_candidate', (data) => {
-      io.to(data.to).emit('ice_candidate', {
-        from: socket.userId,
-        candidate: data.candidate
-      });
+      io.to(data.to).emit('ice_candidate', { from: socket.userId, candidate: data.candidate });
     });
 
     socket.on('disconnect', () => {

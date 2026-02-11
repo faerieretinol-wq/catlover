@@ -1,0 +1,13 @@
+@ECHO OFF
+SETLOCAL
+SET DIRNAME=%~dp0
+IF "%DIRNAME%"=="" SET DIRNAME=.
+SET APP_BASE_NAME=%~n0
+SET APP_HOME=%DIRNAME%
+SET WRAPPER_JAR=%APP_HOME%\gradle\wrapper\gradle-wrapper.jar
+IF NOT EXIST "%WRAPPER_JAR%" (
+  ECHO Gradle wrapper jar not found.
+  EXIT /B 1
+)
+java %DEFAULT_JVM_OPTS% %JAVA_OPTS% %GRADLE_OPTS% -jar "%WRAPPER_JAR%" %*
+ENDLOCAL
