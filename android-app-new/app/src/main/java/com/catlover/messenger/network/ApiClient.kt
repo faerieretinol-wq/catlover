@@ -227,6 +227,37 @@ object ApiClient {
             Result.failure(e)
         }
     }
+    
+    suspend fun createDirectChat(userId: String): Result<Chat> = withContext(Dispatchers.IO) {
+        try {
+            val json = JSONObject().apply {
+                put("userId", userId)
+            }
+            
+            val request = Request.Builder()
+                .url("$BASE_URL/api/chat/dm")
+                .header("Authorization", "Bearer $authToken")
+                .post(json.toString().toRequestBody(JSON))
+                .build()
+            
+            val response = client.newCall(request).execute()
+            val responseBody = response.body?.string() ?: ""
+            
+            if (response.isSuccessful) {
+                val obj = JSONObject(responseBody)
+                Result.success(Chat(
+                    id = obj.getString("id"),
+                    title = obj.optString("title", "Чат"),
+                    lastMessage = "",
+                    isGroup = obj.optBoolean("is_group", false)
+                ))
+            } else {
+                Result.failure(Exception("Не удалось создать чат"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }
 
 data class Chat(

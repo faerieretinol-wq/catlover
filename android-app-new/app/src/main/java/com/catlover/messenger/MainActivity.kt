@@ -338,7 +338,7 @@ fun MainScreen() {
             Box(modifier = Modifier.weight(1f)) {
                 when (selectedTab) {
                     0 -> ChatsListScreen(onChatClick = { chatId -> selectedChatId = chatId })
-                    1 -> SearchUsersScreen()
+                    1 -> SearchUsersScreen(onChatCreated = { chatId -> selectedChatId = chatId })
                     2 -> ProfileScreen()
                 }
             }
@@ -455,10 +455,12 @@ fun ChatsListScreen(onChatClick: (String) -> Unit) {
 }
 
 @Composable
-fun SearchUsersScreen() {
+fun SearchUsersScreen(onChatCreated: (String) -> Unit) {
     var searchQuery by remember { mutableStateOf("") }
     var users by remember { mutableStateOf<List<User>>(emptyList()) }
     var isLoading by remember { mutableStateOf(false) }
+    var selectedUser by remember { mutableStateOf<User?>(null) }
+    var isCreatingChat by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
     
     Column(
@@ -513,7 +515,7 @@ fun SearchUsersScreen() {
                             .padding(vertical = 8.dp),
                         shape = MaterialTheme.shapes.medium,
                         color = Color(0x20FFFFFF),
-                        onClick = { }
+                        onClick = { selectedUser = user }
                     ) {
                         Row(
                             modifier = Modifier.padding(16.dp),
@@ -551,6 +553,42 @@ fun SearchUsersScreen() {
                 }
             }
         }
+        
+        if (isCreatingChat) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Создание чата...", color = Color.White)
+            }
+        }
+    }
+    
+    // Диалог действий с пользователем
+    if (selectedUser != null) {
+        UserActionsDialog(
+            user = selectedUser!!,
+            onDismiss = { selectedUser = null },
+            onStartChat = { userId ->
+                selectedUser = null
+                isCreatingChat = true
+                scope.launch {
+                    ApiClient.createDirectChat(userId).fold(
+                        onSuccess = { chat ->
+                            isCreatingChat = false
+                            onChatCreated(chat.id)
+                        },
+                        onFailure = {
+                            isCreatingChat = false
+                        }
+                    )
+                }
+            },
+            onViewProfile = { userId ->
+                selectedUser = null
+                // TODO: Открыть профиль пользователя
+            }
+        )
     }
 }
 
@@ -927,4 +965,80 @@ fun BottomNavItem(icon: String, label: String, selected: Boolean, onClick: () ->
             color = if (selected) Color(0xFFBD00FF) else Color(0x80FFFFFF)
         )
     }
+}
+
+@Composable
+fun UserActionsDialog(
+    user: User,
+    onDismiss: () -> Unit,
+    onStartChat: (String) -> Unit,
+    onViewProfile: (String) -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        containerColor = Color(0xE0000000),
+        title = {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(64.dp)
+                        .background(Color(0xFF00F3FF), shape = MaterialTheme.shapes.medium),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        user.username.firstOrNull()?.toString() ?: "?",
+                        color = Color.White,
+                        fontSize = 28.sp
+                    )
+                }
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    user.username,
+                    color = Color.White,
+                    fontSize = 20.sp
+                )
+                if (user.status.isNotEmpty()) {
+                    Text(
+                        user.status,
+                        color = Color(0xAAFFFFFF),
+                        fontSize = 14.sp
+                    )
+                }
+            }
+        },
+        text = {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Button(
+                    onClick = { onStartChat(user.id) },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0xFFBD00FF)
+                    )
+                ) {
+                    Text("💬 Начать чат", fontSize = 16.sp)
+                }
+                
+                Button(
+                    onClick = { onViewProfile(user.id) },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0x30FFFFFF)
+                    )
+                ) {
+                    Text("👤 Смотреть профиль", fontSize = 16.sp, color = Color.White)
+                }
+            }
+        },
+        confirmButton = {},
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Закрыть", color = Color(0xFF00F3FF))
+            }
+        }
+    )
 }
