@@ -97,7 +97,7 @@ MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\Angel\.gradle\cach
 	android:allowBackup
 		ADDED from D:\Projects\Catlover\android-app-new\app\src\main\AndroidManifest.xml:6:9-36
 	android:theme
-		ADDED from D:\Projects\Catlover\android-app-new\app\src\main\AndroidManifest.xml:8:9-60
+		ADDED from D:\Projects\Catlover\android-app-new\app\src\main\AndroidManifest.xml:8:9-40
 activity#com.catlover.messenger.MainActivity
 ADDED from D:\Projects\Catlover\android-app-new\app\src\main\AndroidManifest.xml:10:9-17:20
 	android:exported

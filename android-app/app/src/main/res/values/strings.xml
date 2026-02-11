@@ -1,4 +1,265 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">CatLover</string>
+    <string name="title_feed">Feed</string>
+    <string name="title_search">Search</string>
+    <string name="title_alerts">Alerts</string>
+    <string name="title_chats">Chats</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_settings_wizard">Settings Wizard</string>
+    <string name="title_registration">Registration</string>
+    <string name="title_login">Login</string>
+    
+    <string name="action_login">Sign In</string>
+    <string name="action_register">Create Account</string>
+    <string name="action_have_account">I already have an account</string>
+    <string name="action_back">Back</string>
+    <string name="action_save">Save</string>
+    <string name="action_post">Post</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_edit_profile">Edit Profile</string>
+    <string name="action_share_profile">Share Profile</string>
+    <string name="action_logout">Log Out</string>
+    <string name="action_profile">Profile</string>
+    <string name="action_export_style">Export Style</string>
+    <string name="action_import_style">Import Style</string>
+    <string name="action_import_share">Import from Link</string>
+    <string name="action_load_profile">Load Profile</string>
+    <string name="action_create_share">Create Share Link</string>
+    <string name="action_check">Check</string>
+    <string name="action_save_profile">Save Profile</string>
+
+    <string name="label_email">Email</string>
+    <string name="label_username">Username</string>
+    <string name="label_password">Password</string>
+    <string name="label_whats_new">What\'s new?</string>
+    <string name="label_message_placeholder">Message...</string>
+    <string name="label_online">Online</string>
+    <string name="label_offline">Offline</string>
+    <string name="label_posts">Posts</string>
+    <string name="label_followers">Followers</string>
+    <string name="label_following">Following</string>
+    <string name="label_bio">Bio</string>
+    <string name="label_no_posts">No posts yet</string>
+    <string name="label_share_code">Share Code</string>
+    <string name="label_share_link">Share Link</string>
+
+    <string name="feature_locked">Soon</string>
+    <string name="feature_stories">Stories</string>
+    <string name="feature_calls">Calls</string>
+
+    <string name="error_unknown">Unknown error</string>
+    <string name="error_generic">Error: %1$s</string>
+    <string name="error_schema_load">Schema load error</string>
+    <string name="error_invalid_share">Invalid share link</string>
+    <string name="error_invalid_style">Invalid style code</string>
+
+    <!-- Settings Keys -->
+    <string name="section_comments">Comments</string>
+    <string name="section_privacy">Privacy</string>
+    <string name="section_appearance">Appearance</string>
+    <string name="section_general">General</string>
+    <string name="section_media">Media</string>
+    <string name="section_notifications">Notifications</string>
+    <string name="section_data">Data</string>
+    <string name="section_sharing">Sharing</string>
+    <string name="section_other">Other</string>
+
+    <string name="label_comment_format">Comment format</string>
+    <string name="label_comment_sort">Comment sort</string>
+    <string name="label_privacy_level">Privacy level</string>
+    <string name="label_theme">Theme</string>
+    <string name="label_font_scale">Font scale</string>
+    <string name="label_animations">Animations</string>
+    <string name="label_shareable_style">Allow sharing</string>
+    <string name="label_language">Language</string>
+    <string name="label_timezone">Timezone</string>
+    <string name="label_time_format">Time format</string>
+    <string name="label_date_format">Date format</string>
+    <string name="label_compact_mode">Compact mode</string>
+    <string name="label_show_online">Show online</string>
+    <string name="label_allow_dms">Allow DMs</string>
+    <string name="label_read_receipts">Read receipts</string>
+    <string name="label_typing_indicators">Typing indicators</string>
+    <string name="label_message_preview">Message preview</string>
+    <string name="label_auto_download">Auto download media</string>
+    <string name="label_save_gallery">Save to gallery</string>
+    <string name="label_media_quality">Media quality</string>
+    <string name="label_voice_hq">Voice HQ</string>
+    <string name="label_sticker_autoplay">Sticker autoplay</string>
+    <string name="label_animated_avatars">Animated avatars</string>
+    <string name="label_bubble_style">Bubble style</string>
+    <string name="label_accent_color">Accent color</string>
+    <string name="label_background_pattern">Background pattern</string>
+    <string name="label_haptics">Haptics</string>
+    <string name="label_sound_level">Sound level</string>
+    <string name="label_notification_tone">Notification tone</string>
+    <string name="label_push_notifications">Push notifications</string>
+    <string name="label_quiet_hours">Quiet hours</string>
+    <string name="label_quiet_start">Quiet hours start</string>
+    <string name="label_quiet_end">Quiet hours end</string>
+    <string name="label_backup_enabled">Backup enabled</string>
+    <string name="label_backup_wifi">Backup WiFi only</string>
+    <string name="label_data_saver">Data saver</string>
+    <string name="label_profile_discoverable">Profile discoverable</string>
+    <string name="label_show_last_seen">Show last seen</string>
+    <string name="label_allow_friend_requests">Allow friend requests</string>
+
+    <string name="label_language_en">English</string>
+    <string name="label_language_ru">Russian</string>
+    <string name="toast_restart_for_language">Restart app to apply language.</string>
+
+    <string name="opt_comment_linear">Linear</string>
+    <string name="opt_comment_threaded">Threaded</string>
+    <string name="opt_comment_forum">Forum</string>
+    <string name="opt_sort_new">Newest</string>
+    <string name="opt_sort_old">Oldest</string>
+    <string name="opt_sort_top">Top</string>
+    <string name="opt_sort_controversial">Controversial</string>
+    <string name="opt_sort_mine">Mine</string>
+    <string name="opt_privacy_public">Public</string>
+    <string name="opt_privacy_private">Private</string>
+    <string name="opt_privacy_hidden">Hidden</string>
+    <string name="opt_privacy_anonymous">Anonymous</string>
+    <string name="opt_theme_light">Light</string>
+    <string name="opt_theme_dark">Dark</string>
+    <string name="opt_theme_contrast">Contrast</string>
+    <string name="opt_theme_custom">Custom</string>
+    <string name="opt_anim_none">None</string>
+    <string name="opt_anim_subtle">Subtle</string>
+    <string name="opt_anim_full">Full</string>
+    <string name="opt_time_24h">24-hour</string>
+    <string name="opt_time_12h">12-hour</string>
+    <string name="opt_date_ymd">Y-M-D</string>
+    <string name="opt_date_dmy">D-M-Y</string>
+    <string name="opt_date_mdy">M-D-Y</string>
+    <string name="opt_allow_everyone">Everyone</string>
+    <string name="opt_allow_followers">Followers</string>
+    <string name="opt_allow_friends">Friends</string>
+    <string name="opt_allow_nobody">Nobody</string>
+    <string name="opt_auto_never">Never</string>
+    <string name="opt_auto_wifi">WiFi only</string>
+    <string name="opt_auto_always">Always</string>
+    <string name="opt_quality_low">Low</string>
+    <string name="opt_quality_medium">Medium</string>
+    <string name="opt_quality_high">High</string>
+    <string name="opt_bubble_rounded">Rounded</string>
+    <string name="opt_bubble_classic">Classic</string>
+    <string name="opt_bubble_compact">Compact</string>
+    <string name="opt_accent_blue">Blue</string>
+    <string name="opt_accent_green">Green</string>
+    <string name="opt_accent_red">Red</string>
+    <string name="opt_accent_orange">Orange</string>
+    <string name="opt_accent_pink">Pink</string>
+    <string name="opt_accent_teal">Teal</string>
+    <string name="opt_bg_none">None</string>
+    <string name="opt_bg_dots">Dots</string>
+    <string name="opt_bg_grid">Grid</string>
+    <string name="opt_bg_waves">Waves</string>
+    <string name="opt_tone_default">Default</string>
+    <string name="opt_tone_chime">Chime</string>
+    <string name="opt_tone_soft">Soft</string>
+    <string name="opt_tone_none">None</string>
+
+    <!-- New UI Strings -->
+    <string name="title_blocked">Blocked Users</string>
+    <string name="label_no_blocked">No blocked users</string>
+    <string name="label_no_chats">No conversations yet</string>
+    <string name="label_no_notifications">No notifications yet</string>
+    <string name="label_no_search_results">No users found</string>
+    <string name="label_search_hint">Type at least 2 characters</string>
+    <string name="label_search_users">Search users...</string>
+    <string name="label_search_channels">Search channels...</string>
+    <string name="label_no_channels_found">No channels found</string>
+    <string name="tab_users">Users</string>
+    <string name="tab_channels">Channels</string>
+    <string name="label_typing">typing...</string>
+    <string name="label_new_message">New Message</string>
+    <string name="label_no_likes">No likes yet</string>
+    <string name="action_report">Report</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_unblock">Unblock</string>
+    <string name="action_message">Message</string>
+    <string name="confirm_delete_post">Delete this post forever?</string>
+    <string name="confirm_delete_chat">Delete this chat for everyone?</string>
+    <string name="confirm_report">Are you sure you want to report this content?</string>
+    <string name="toast_report_sent">Report sent. Thank you.</string>
+    
+    <!-- Additional UI strings -->
+    <string name="action_send">Send</string>
+    <string name="action_submit">Submit</string>
+    <string name="action_create">Create</string>
+    <string name="action_confirm">Confirm</string>
+    <string name="action_verify">Verify</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_like">Like</string>
+    <string name="action_comment">Comment</string>
+    <string name="action_follow">Follow</string>
+    <string name="action_following">Following</string>
+    <string name="action_unfollow">Unfollow</string>
+    <string name="action_block">Block</string>
+    <string name="action_share">Share</string>
+    
+    <string name="label_whats_happening">What\'s happening?</string>
+    <string name="label_write_comment">Write a comment...</string>
+    <string name="label_report_reason">Report reason</string>
+    <string name="label_chats_tab">Chats</string>
+    <string name="label_archived_tab">Archived</string>
+    <string name="label_subscribers">subscribers</string>
+    <string name="label_subscribed">Subscribed</string>
+    <string name="label_subscribe">Subscribe</string>
+    
+    <string name="toast_report_submitted">Report submitted</string>
+    <string name="toast_subscribed">Subscribed!</string>
+    <string name="toast_unsubscribed">Unsubscribed</string>
+    
+    <string name="confirm_delete_account">Are you sure? This cannot be undone.</string>
+    <string name="title_delete_account">Delete Account</string>
+    
+    <!-- Feed tabs -->
+    <string name="tab_all">All</string>
+    <string name="tab_following">Following</string>
+    <string name="tab_saved">Saved</string>
+    <string name="action_load_more">Load more</string>
+    
+    <!-- Email verification -->
+    <string name="title_verify_email">Verify Email</string>
+    <string name="label_verification_code">Code</string>
+    <string name="hint_enter_code">Enter the verification code sent to your email:</string>
+    <string name="toast_email_verified">Email Verified!</string>
+    <string name="toast_invalid_code">Invalid code</string>
+    
+    <!-- New strings for UI improvements -->
+    <string name="label_no_posts_found">No posts found</string>
+    <string name="label_no_saved_posts">No saved posts yet</string>
+    <string name="label_user">User</string>
+    <string name="title_new_post">New Post</string>
+    <string name="hint_whats_on_mind">What\'s on your mind?</string>
+    <string name="action_add_photo_video">Add Photo/Video</string>
+    <string name="label_photo_selected">Photo Selected</string>
+    <string name="label_video_selected">Video Selected</string>
+    <string name="title_new_story">New Story</string>
+    <string name="hint_share_story">Share this photo as a story?</string>
+    <string name="hint_share_video_story">Share this video as a story?</string>
+    <string name="title_edit_post">Edit Post</string>
+    <string name="title_report_post">Report Post</string>
+    <string name="hint_report_reason">Why are you reporting this post?</string>
+    <string name="hint_report_details">Spam, harassment, inappropriate content, etc.</string>
+    <string name="toast_report_failed">Failed to report</string>
+    <string name="label_file">File</string>
+    <string name="label_chat">Chat</string>
+    <string name="toast_error">Error: %1$s</string>
+    <string name="title_create_poll">Create Poll</string>
+    <string name="label_question">Question</string>
+    <string name="label_option">Option %1$d</string>
+    <string name="action_react">React</string>
+    <string name="action_forward">Forward</string>
+    <string name="action_pin">Pin</string>
+    <string name="action_close">Close</string>
+    <string name="title_report_user">Report User</string>
+    <string name="hint_report_user">Why are you reporting @%1$s?</string>
+    <string name="hint_spam_harassment">Spam, harassment, etc.</string>
+    <string name="label_reason">Reason</string>
+    <string name="toast_message_sent">Message sent</string>
+    <string name="toast_send_failed">Send failed: %1$s</string>
 </resources>

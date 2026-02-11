@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.catlover.app-mergeDebugResources-55:/values-v24/values-v24.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\Angel\\.gradle\\caches\\transforms-3\\27d26d63c6b74f2c55b68f84c7f5d2d4\\transformed\\media-1.6.0\\res\\values-v24\\values-v24.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,121,182,248",
+                        "endColumns": "65,60,65,66",
+                        "endOffsets": "116,177,243,310"
+                    }
+                }
+            ]
+        }
+    ]
+}

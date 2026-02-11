@@ -1,25 +1,8 @@
 {
     "logs": [
         {
-            "outputFile": "com.catlover.app-mergeDebugResources-47:/values-as/values-as.xml",
+            "outputFile": "com.catlover.app-mergeDebugResources-55:/values-as/values-as.xml",
             "map": [
-                {
-                    "source": "C:\\Users\\Angel\\.gradle\\caches\\transforms-3\\9792fb5f9211965b6a257218718f5d13\\transformed\\core-1.12.0\\res\\values-as\\values-as.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,156,259,367,472,576,676,805",
-                        "endColumns": "100,102,107,104,103,99,128,100",
-                        "endOffsets": "151,254,362,467,571,671,800,901"
-                    },
-                    "to": {
-                        "startLines": "6,7,8,9,10,11,12,63",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "559,660,763,871,976,1080,1180,6460",
-                        "endColumns": "100,102,107,104,103,99,128,100",
-                        "endOffsets": "655,758,866,971,1075,1175,1304,6556"
-                    }
-                },
                 {
                     "source": "C:\\Users\\Angel\\.gradle\\caches\\transforms-3\\c5291aef2fce1d358f13b71c9afa8e17\\transformed\\jetified-foundation-release\\res\\values-as\\values-as.xml",
                     "from": {
@@ -52,6 +35,23 @@
                         "startOffsets": "1309,1404,5089,5182,5353,5523,5620,5719,5808,5898,5966,6038,6121,6293,6666,6741,6807",
                         "endColumns": "94,84,92,97,86,96,98,88,89,67,71,82,84,78,74,65,117",
                         "endOffsets": "1399,1484,5177,5275,5435,5615,5714,5803,5893,5961,6033,6116,6201,6367,6736,6802,6920"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\Angel\\.gradle\\caches\\transforms-3\\cb83ae7bddb00a0564bd0c5921e26ac5\\transformed\\core-1.13.0\\res\\values-as\\values-as.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,156,259,367,472,576,676,805",
+                        "endColumns": "100,102,107,104,103,99,128,100",
+                        "endOffsets": "151,254,362,467,571,671,800,901"
+                    },
+                    "to": {
+                        "startLines": "6,7,8,9,10,11,12,63",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "559,660,763,871,976,1080,1180,6460",
+                        "endColumns": "100,102,107,104,103,99,128,100",
+                        "endOffsets": "655,758,866,971,1075,1175,1304,6556"
                     }
                 },
                 {

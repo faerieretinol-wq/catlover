@@ -4,6 +4,86 @@ const { getIo } = require('../socket');
 const authMiddleware = require('../middleware/auth');
 const router = express.Router();
 
+router.post('/create', authMiddleware, async (req, res) => {
+  const userId = req.user.userId;
+  const { title, memberIds, isGroup } = req.body;
+  const db = getDb();
+  try {
+    await req.setUserContext(db);
+
+    const members = Array.isArray(memberIds) ? memberIds : [];
+    const uniqueMembers = Array.from(new Set([userId, ...members].filter(Boolean)));
+    if (uniqueMembers.length < 2) {
+      return res.status(400).json({ error: 'At least 2 members required' });
+    }
+
+    await db.query('BEGIN');
+    const chatRes = await db.query(
+      'INSERT INTO chats (title, is_group) VALUES ($1, $2) RETURNING *',
+      [title || null, Boolean(isGroup)]
+    );
+    const chat = chatRes.rows[0];
+
+    for (const memberId of uniqueMembers) {
+      await db.query(
+        'INSERT INTO chat_members (chat_id, user_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
+        [chat.id, memberId]
+      );
+    }
+    await db.query('COMMIT');
+
+    res.status(201).json(chat);
+  } catch (err) {
+    await db.query('ROLLBACK').catch(() => {});
+    res.status(500).json({ error: 'Failed to create chat' });
+  }
+});
+
+router.post('/dm', authMiddleware, async (req, res) => {
+  const userId = req.user.userId;
+  const { userId: otherUserId } = req.body;
+  const db = getDb();
+  try {
+    await req.setUserContext(db);
+
+    if (!otherUserId || typeof otherUserId !== 'string' || otherUserId === userId) {
+      return res.status(400).json({ error: 'Invalid userId' });
+    }
+
+    const existing = await db.query(
+      `SELECT c.*
+       FROM chats c
+       JOIN chat_members cm1 ON cm1.chat_id = c.id AND cm1.user_id = $1
+       JOIN chat_members cm2 ON cm2.chat_id = c.id AND cm2.user_id = $2
+       WHERE c.is_group = false`,
+      [userId, otherUserId]
+    );
+    if (existing.rows.length > 0) return res.json(existing.rows[0]);
+
+    await db.query('BEGIN');
+    const chatRes = await db.query(
+      'INSERT INTO chats (title, is_group) VALUES (NULL, false) RETURNING *',
+      []
+    );
+    const chat = chatRes.rows[0];
+
+    await db.query(
+      'INSERT INTO chat_members (chat_id, user_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
+      [chat.id, userId]
+    );
+    await db.query(
+      'INSERT INTO chat_members (chat_id, user_id) VALUES ($1, $2) ON CONFLICT DO NOTHING',
+      [chat.id, otherUserId]
+    );
+    await db.query('COMMIT');
+
+    res.status(201).json(chat);
+  } catch (err) {
+    await db.query('ROLLBACK').catch(() => {});
+    res.status(500).json({ error: 'Failed to create dm' });
+  }
+});
+
 router.get('/', authMiddleware, async (req, res) => {
   const userId = req.user.userId;
   const db = getDb();
@@ -20,6 +100,25 @@ router.get('/', authMiddleware, async (req, res) => {
     res.json(chats.rows);
   } catch (err) {
     res.status(500).json({ error: 'Failed to fetch chats' });
+  }
+});
+
+router.get('/:chatId/messages', authMiddleware, async (req, res) => {
+  const { chatId } = req.params;
+  const userId = req.user.userId;
+  const db = getDb();
+  try {
+    await req.setUserContext(db);
+    const member = await db.query('SELECT 1 FROM chat_members WHERE chat_id = $1 AND user_id = $2', [chatId, userId]);
+    if (member.rows.length === 0) return res.status(403).json({ error: 'Unauthorized' });
+
+    const result = await db.query(
+      'SELECT * FROM messages WHERE chat_id = $1 ORDER BY created_at ASC LIMIT 200',
+      [chatId]
+    );
+    res.json(result.rows);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch messages' });
   }
 });
 

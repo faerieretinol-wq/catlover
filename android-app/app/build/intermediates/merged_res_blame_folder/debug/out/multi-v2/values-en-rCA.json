@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.catlover.app-mergeDebugResources-47:/values-en-rCA/values-en-rCA.xml",
+            "outputFile": "com.catlover.app-mergeDebugResources-55:/values-en-rCA/values-en-rCA.xml",
             "map": [
                 {
                     "source": "C:\\Users\\Angel\\.gradle\\caches\\transforms-3\\ff08d56803c2e44fb9bedf34f4b60756\\transformed\\jetified-material3-1.1.2\\res\\values-en-rCA\\values-en-rCA.xml",
@@ -21,23 +21,6 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Angel\\.gradle\\caches\\transforms-3\\9792fb5f9211965b6a257218718f5d13\\transformed\\core-1.12.0\\res\\values-en-rCA\\values-en-rCA.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,151,253,352,451,555,657,773",
-                        "endColumns": "95,101,98,98,103,101,115,100",
-                        "endOffsets": "146,248,347,446,550,652,768,869"
-                    },
-                    "to": {
-                        "startLines": "6,7,8,9,10,11,12,63",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "548,644,746,845,944,1048,1150,6240",
-                        "endColumns": "95,101,98,98,103,101,115,100",
-                        "endOffsets": "639,741,840,939,1043,1145,1261,6336"
-                    }
-                },
-                {
                     "source": "C:\\Users\\Angel\\.gradle\\caches\\transforms-3\\588d1538d533402419f8cfe407759a1f\\transformed\\jetified-ui-release\\res\\values-en-rCA\\values-en-rCA.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18",
@@ -52,6 +35,23 @@
                         "startOffsets": "1266,1358,4940,5034,5205,5367,5449,5539,5628,5712,5777,5841,5919,6084,6439,6516,6582",
                         "endColumns": "91,81,93,98,85,81,89,88,83,64,63,77,81,72,76,65,119",
                         "endOffsets": "1353,1435,5029,5128,5286,5444,5534,5623,5707,5772,5836,5914,5996,6152,6511,6577,6697"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\Angel\\.gradle\\caches\\transforms-3\\cb83ae7bddb00a0564bd0c5921e26ac5\\transformed\\core-1.13.0\\res\\values-en-rCA\\values-en-rCA.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,151,253,352,451,555,657,773",
+                        "endColumns": "95,101,98,98,103,101,115,100",
+                        "endOffsets": "146,248,347,446,550,652,768,869"
+                    },
+                    "to": {
+                        "startLines": "6,7,8,9,10,11,12,63",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "548,644,746,845,944,1048,1150,6240",
+                        "endColumns": "95,101,98,98,103,101,115,100",
+                        "endOffsets": "639,741,840,939,1043,1145,1261,6336"
                     }
                 },
                 {

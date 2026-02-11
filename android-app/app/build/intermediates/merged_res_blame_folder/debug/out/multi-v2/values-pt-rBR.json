@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.catlover.app-mergeDebugResources-47:/values-pt-rBR/values-pt-rBR.xml",
+            "outputFile": "com.catlover.app-mergeDebugResources-55:/values-pt-rBR/values-pt-rBR.xml",
             "map": [
                 {
                     "source": "C:\\Users\\Angel\\.gradle\\caches\\transforms-3\\c5291aef2fce1d358f13b71c9afa8e17\\transformed\\jetified-foundation-release\\res\\values-pt-rBR\\values-pt-rBR.xml",
@@ -55,7 +55,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\Angel\\.gradle\\caches\\transforms-3\\9792fb5f9211965b6a257218718f5d13\\transformed\\core-1.12.0\\res\\values-pt-rBR\\values-pt-rBR.xml",
+                    "source": "C:\\Users\\Angel\\.gradle\\caches\\transforms-3\\cb83ae7bddb00a0564bd0c5921e26ac5\\transformed\\core-1.13.0\\res\\values-pt-rBR\\values-pt-rBR.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",

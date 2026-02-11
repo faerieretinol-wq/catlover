@@ -6,6 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -18,7 +22,10 @@ import com.catlover.messenger.network.ApiClient
 import com.catlover.messenger.network.Chat
 import com.catlover.messenger.network.User
 import com.catlover.messenger.network.UserProfile
+import com.catlover.messenger.network.Message
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -291,54 +298,62 @@ fun RegisterScreen(onRegisterSuccess: () -> Unit, onBackToLogin: () -> Unit) {
 @Composable
 fun MainScreen() {
     var selectedTab by remember { mutableStateOf(0) }
+    var selectedChatId by remember { mutableStateOf<String?>(null) }
     
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFF0A0A0A))
-    ) {
-        // Верхняя панель
-        Surface(
-            modifier = Modifier.fillMaxWidth(),
-            color = Color(0x30FFFFFF),
-            shadowElevation = 4.dp
+    if (selectedChatId != null) {
+        ChatDetailScreen(
+            chatId = selectedChatId!!,
+            onBack = { selectedChatId = null }
+        )
+    } else {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0xFF0A0A0A))
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+            // Верхняя панель
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                color = Color(0x30FFFFFF),
+                shadowElevation = 4.dp
             ) {
-                Text(
-                    "CatLover",
-                    fontSize = 24.sp,
-                    color = Color(0xFFBD00FF),
-                    style = MaterialTheme.typography.headlineSmall
-                )
-                
-                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    IconButton(onClick = { selectedTab = 1 }) {
-                        Text("🔍", fontSize = 20.sp)
-                    }
-                    IconButton(onClick = { selectedTab = 2 }) {
-                        Text("👤", fontSize = 20.sp)
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        "CatLover",
+                        fontSize = 24.sp,
+                        color = Color(0xFFBD00FF),
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                    
+                    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        IconButton(onClick = { selectedTab = 1 }) {
+                            Text("🔍", fontSize = 20.sp)
+                        }
+                        IconButton(onClick = { selectedTab = 2 }) {
+                            Text("👤", fontSize = 20.sp)
+                        }
                     }
                 }
             }
-        }
-        
-        // Контент
-        when (selectedTab) {
-            0 -> ChatsListScreen()
-            1 -> SearchUsersScreen()
-            2 -> ProfileScreen()
+            
+            // Контент
+            when (selectedTab) {
+                0 -> ChatsListScreen(onChatClick = { chatId -> selectedChatId = chatId })
+                1 -> SearchUsersScreen()
+                2 -> ProfileScreen()
+            }
         }
     }
 }
 
 @Composable
-fun ChatsListScreen() {
+fun ChatsListScreen(onChatClick: (String) -> Unit) {
     var chats by remember { mutableStateOf<List<Chat>>(emptyList()) }
     var isLoading by remember { mutableStateOf(true) }
     val scope = rememberCoroutineScope()
@@ -373,7 +388,7 @@ fun ChatsListScreen() {
                         .padding(horizontal = 16.dp, vertical = 8.dp),
                     shape = MaterialTheme.shapes.medium,
                     color = Color(0x20FFFFFF),
-                    onClick = { }
+                    onClick = { onChatClick(chat.id) }
                 ) {
                     Row(
                         modifier = Modifier.padding(16.dp),
@@ -579,6 +594,34 @@ fun ProfileScreen() {
             
             Spacer(modifier = Modifier.height(16.dp))
             
+            // Информация о функциях
+            Surface(
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.medium,
+                color = Color(0x20FFFFFF)
+            ) {
+                Column(
+                    modifier = Modifier.padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    Text(
+                        "Доступные функции:",
+                        fontSize = 16.sp,
+                        color = Color(0xFFBD00FF),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                    
+                    FeatureItem("💬", "Текстовые сообщения")
+                    FeatureItem("📞", "Голосовые звонки (WebRTC)")
+                    FeatureItem("📹", "Видео звонки (WebRTC)")
+                    FeatureItem("👥", "Групповые чаты")
+                    FeatureItem("🔒", "E2E шифрование")
+                    FeatureItem("📎", "Отправка файлов")
+                }
+            }
+            
+            Spacer(modifier = Modifier.height(16.dp))
+            
             Button(
                 onClick = { },
                 modifier = Modifier.fillMaxWidth(),
@@ -599,5 +642,241 @@ fun ProfileScreen() {
                 Text("Выйти", color = Color(0xFFFF5555))
             }
         }
+    }
+}
+
+@Composable
+fun ChatDetailScreen(chatId: String, onBack: () -> Unit) {
+    var messages by remember { mutableStateOf<List<Message>>(emptyList()) }
+    var messageText by remember { mutableStateOf("") }
+    var isLoading by remember { mutableStateOf(true) }
+    var isSending by remember { mutableStateOf(false) }
+    val scope = rememberCoroutineScope()
+    
+    // Загрузка сообщений
+    LaunchedEffect(chatId) {
+        scope.launch {
+            ApiClient.getMessages(chatId).fold(
+                onSuccess = { 
+                    messages = it
+                    isLoading = false
+                },
+                onFailure = { isLoading = false }
+            )
+        }
+    }
+    
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFF0A0A0A))
+    ) {
+        // Верхняя панель с кнопкой назад
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            color = Color(0x30FFFFFF),
+            shadowElevation = 4.dp
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                IconButton(onClick = onBack) {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Назад",
+                        tint = Color.White
+                    )
+                }
+                Text(
+                    "Чат",
+                    fontSize = 20.sp,
+                    color = Color.White,
+                    style = MaterialTheme.typography.titleLarge
+                )
+                
+                Spacer(modifier = Modifier.weight(1f))
+                
+                // Кнопки звонков
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    IconButton(
+                        onClick = { /* TODO: Голосовой звонок */ },
+                        modifier = Modifier
+                            .size(40.dp)
+                            .background(Color(0x30FFFFFF), shape = RoundedCornerShape(20.dp))
+                    ) {
+                        Text("📞", fontSize = 20.sp)
+                    }
+                    
+                    IconButton(
+                        onClick = { /* TODO: Видео звонок */ },
+                        modifier = Modifier
+                            .size(40.dp)
+                            .background(Color(0x30FFFFFF), shape = RoundedCornerShape(20.dp))
+                    ) {
+                        Text("📹", fontSize = 20.sp)
+                    }
+                }
+            }
+        }
+        
+        // Список сообщений
+        Box(modifier = Modifier.weight(1f)) {
+            if (isLoading) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("Загрузка сообщений...", color = Color(0x80FFFFFF))
+                }
+            } else if (messages.isEmpty()) {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text("Нет сообщений", color = Color(0x80FFFFFF))
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    reverseLayout = false,
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    items(messages.size) { index ->
+                        val message = messages[index]
+                        MessageBubble(message)
+                    }
+                }
+            }
+        }
+        
+        // Поле ввода сообщения
+        Surface(
+            modifier = Modifier.fillMaxWidth(),
+            color = Color(0x30FFFFFF),
+            shadowElevation = 8.dp
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                OutlinedTextField(
+                    value = messageText,
+                    onValueChange = { messageText = it },
+                    placeholder = { Text("Сообщение...", color = Color(0x80FFFFFF)) },
+                    modifier = Modifier.weight(1f),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedTextColor = Color.White,
+                        unfocusedTextColor = Color(0xCCFFFFFF),
+                        focusedBorderColor = Color(0xFFBD00FF),
+                        unfocusedBorderColor = Color(0x60FFFFFF),
+                        cursorColor = Color(0xFFBD00FF)
+                    ),
+                    shape = RoundedCornerShape(24.dp),
+                    maxLines = 3
+                )
+                
+                IconButton(
+                    onClick = {
+                        if (messageText.isNotBlank() && !isSending) {
+                            isSending = true
+                            val textToSend = messageText
+                            messageText = ""
+                            scope.launch {
+                                ApiClient.sendMessage(chatId, textToSend).fold(
+                                    onSuccess = { newMessage ->
+                                        messages = messages + newMessage
+                                        isSending = false
+                                    },
+                                    onFailure = {
+                                        messageText = textToSend
+                                        isSending = false
+                                    }
+                                )
+                            }
+                        }
+                    },
+                    enabled = messageText.isNotBlank() && !isSending,
+                    modifier = Modifier
+                        .size(48.dp)
+                        .background(
+                            if (messageText.isNotBlank()) Color(0xFFBD00FF) else Color(0x40FFFFFF),
+                            shape = RoundedCornerShape(24.dp)
+                        )
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Send,
+                        contentDescription = "Отправить",
+                        tint = Color.White
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun MessageBubble(message: Message) {
+    // Получаем ID текущего пользователя из токена (упрощенно)
+    val isOwnMessage = false // TODO: определить по sender_id
+    
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = if (isOwnMessage) Arrangement.End else Arrangement.Start
+    ) {
+        Surface(
+            shape = RoundedCornerShape(
+                topStart = 16.dp,
+                topEnd = 16.dp,
+                bottomStart = if (isOwnMessage) 16.dp else 4.dp,
+                bottomEnd = if (isOwnMessage) 4.dp else 16.dp
+            ),
+            color = if (isOwnMessage) Color(0xFFBD00FF) else Color(0x30FFFFFF),
+            modifier = Modifier.widthIn(max = 280.dp)
+        ) {
+            Column(
+                modifier = Modifier.padding(12.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(
+                    message.body,
+                    color = Color.White,
+                    fontSize = 15.sp
+                )
+                Text(
+                    formatTime(message.createdAt),
+                    color = Color(0x80FFFFFF),
+                    fontSize = 11.sp
+                )
+            }
+        }
+    }
+}
+
+fun formatTime(timestamp: String): String {
+    return try {
+        val parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+        parser.timeZone = TimeZone.getTimeZone("UTC")
+        val date = parser.parse(timestamp)
+        val formatter = SimpleDateFormat("HH:mm", Locale.getDefault())
+        formatter.format(date ?: Date())
+    } catch (e: Exception) {
+        timestamp.substring(11, 16)
+    }
+}
+
+@Composable
+fun FeatureItem(icon: String, text: String) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(icon, fontSize = 20.sp)
+        Text(
+            text,
+            color = Color(0xCCFFFFFF),
+            fontSize = 14.sp
+        )
     }
 }

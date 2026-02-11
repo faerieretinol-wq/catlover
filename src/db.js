@@ -16,9 +16,7 @@ async function ensurePool() {
 
   pool = new Pool({
     connectionString: connectionString,
-    ssl: process.env.NODE_ENV === 'production' ? {
-      rejectUnauthorized: true
-    } : {
+    ssl: {
       rejectUnauthorized: false
     }
   });

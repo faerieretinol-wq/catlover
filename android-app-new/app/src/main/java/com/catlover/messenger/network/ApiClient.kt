@@ -160,6 +160,73 @@ object ApiClient {
             Result.failure(e)
         }
     }
+    
+    suspend fun getMessages(chatId: String): Result<List<Message>> = withContext(Dispatchers.IO) {
+        try {
+            val request = Request.Builder()
+                .url("$BASE_URL/api/chat/$chatId/messages")
+                .header("Authorization", "Bearer $authToken")
+                .get()
+                .build()
+            
+            val response = client.newCall(request).execute()
+            val body = response.body?.string() ?: ""
+            
+            if (response.isSuccessful) {
+                val jsonArray = org.json.JSONArray(body)
+                val messages = mutableListOf<Message>()
+                for (i in 0 until jsonArray.length()) {
+                    val obj = jsonArray.getJSONObject(i)
+                    messages.add(Message(
+                        id = obj.getString("id"),
+                        chatId = obj.getString("chat_id"),
+                        senderId = obj.getString("sender_id"),
+                        body = obj.optString("body", ""),
+                        createdAt = obj.getString("created_at"),
+                        isRead = obj.optBoolean("is_read", false)
+                    ))
+                }
+                Result.success(messages)
+            } else {
+                Result.failure(Exception("Failed to fetch messages"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+    
+    suspend fun sendMessage(chatId: String, body: String): Result<Message> = withContext(Dispatchers.IO) {
+        try {
+            val json = JSONObject().apply {
+                put("body", body)
+            }
+            
+            val request = Request.Builder()
+                .url("$BASE_URL/api/chat/$chatId/messages")
+                .header("Authorization", "Bearer $authToken")
+                .post(json.toString().toRequestBody(JSON))
+                .build()
+            
+            val response = client.newCall(request).execute()
+            val responseBody = response.body?.string() ?: ""
+            
+            if (response.isSuccessful) {
+                val obj = JSONObject(responseBody)
+                Result.success(Message(
+                    id = obj.getString("id"),
+                    chatId = obj.getString("chat_id"),
+                    senderId = obj.getString("sender_id"),
+                    body = obj.optString("body", ""),
+                    createdAt = obj.getString("created_at"),
+                    isRead = obj.optBoolean("is_read", false)
+                ))
+            } else {
+                Result.failure(Exception("Failed to send message"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }
 
 data class Chat(
@@ -182,4 +249,13 @@ data class UserProfile(
     val avatarUrl: String?,
     val bio: String,
     val status: String
+)
+
+data class Message(
+    val id: String,
+    val chatId: String,
+    val senderId: String,
+    val body: String,
+    val createdAt: String,
+    val isRead: Boolean
 )

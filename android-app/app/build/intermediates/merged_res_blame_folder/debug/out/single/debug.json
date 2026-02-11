@@ -1,18 +1,18 @@
 [
     {
-        "merged": "com.catlover.app-merged_res-49:/mipmap-anydpi-v26_ic_launcher.xml.flat",
-        "source": "com.catlover.app-main-51:/mipmap-anydpi-v26/ic_launcher.xml"
+        "merged": "com.catlover.app-merged_res-57:/drawable_ic_launcher_foreground.xml.flat",
+        "source": "com.catlover.app-main-59:/drawable/ic_launcher_foreground.xml"
     },
     {
-        "merged": "com.catlover.app-merged_res-49:/xml_network_security_config.xml.flat",
-        "source": "com.catlover.app-main-51:/xml/network_security_config.xml"
+        "merged": "com.catlover.app-merged_res-57:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.catlover.app-main-59:/mipmap-anydpi-v26/ic_launcher.xml"
     },
     {
-        "merged": "com.catlover.app-merged_res-49:/drawable_ic_launcher_foreground.xml.flat",
-        "source": "com.catlover.app-main-51:/drawable/ic_launcher_foreground.xml"
+        "merged": "com.catlover.app-merged_res-57:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.catlover.app-main-59:/mipmap-anydpi-v26/ic_launcher_round.xml"
     },
     {
-        "merged": "com.catlover.app-merged_res-49:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
-        "source": "com.catlover.app-main-51:/mipmap-anydpi-v26/ic_launcher_round.xml"
+        "merged": "com.catlover.app-merged_res-57:/xml_network_security_config.xml.flat",
+        "source": "com.catlover.app-main-59:/xml/network_security_config.xml"
     }
 ]

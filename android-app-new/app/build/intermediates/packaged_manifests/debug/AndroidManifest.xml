@@ -22,7 +22,7 @@
         android:debuggable="true"
         android:extractNativeLibs="false"
         android:label="CatLover"
-        android:theme="@android:style/Theme.Material.Light" >
+        android:theme="@style/AppTheme" >
         <activity
             android:name="com.catlover.messenger.MainActivity"
             android:exported="true" >

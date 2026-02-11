@@ -5,7 +5,7 @@
     <application
         android:allowBackup="false"
         android:label="CatLover"
-        android:theme="@android:style/Theme.Material.Light">
+        android:theme="@style/AppTheme">
         
         <activity
             android:name=".MainActivity"
